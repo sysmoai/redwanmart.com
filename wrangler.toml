@@ -5,8 +5,4 @@ compatibility_date = "2025-01-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "redwanmart-db"
-database_id = "8b38ab0e-67ea-4099-964a-2fe77c43769f"
-
-[[r2_buckets]]
-binding = "MEDIA"
-bucket_name = "redwanmart-assets"
+database_id = "f9a20d29-dd8c-4653-b303-e2f3e658a522"
