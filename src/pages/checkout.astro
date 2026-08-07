@@ -1,0 +1,92 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { Button } from "@components/ui/Button";
+import { Input } from "@components/ui/Input";
+---
+
+<BaseLayout>
+  <section class="container mx-auto px-4 py-12 max-w-lg">
+    <h1 class="text-3xl font-bold mb-2">Checkout</h1>
+    <p class="text-rm-neutral-500 mb-8">Fill in your details to complete your order</p>
+
+    <form id="checkout-form" class="space-y-5">
+      <div>
+        <label class="block text-sm font-semibold mb-1.5">Full Name *</label>
+        <input type="text" id="name" required placeholder="Enter your full name"
+          class="flex h-11 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-rm-brand-red focus:border-transparent" />
+      </div>
+      <div>
+        <label class="block text-sm font-semibold mb-1.5">Phone Number *</label>
+        <input type="tel" id="phone" required placeholder="01XXXXXXXXX"
+          class="flex h-11 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-rm-brand-red focus:border-transparent" />
+      </div>
+      <div>
+        <label class="block text-sm font-semibold mb-1.5">Delivery Address *</label>
+        <textarea id="address" required rows="3" placeholder="House, Road, Area, City"
+          class="flex w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-rm-brand-red focus:border-transparent"></textarea>
+      </div>
+      <div id="order-summary"></div>
+      <Button variant="primary" size="lg" type="submit" class="w-full">Place Order</Button>
+    </form>
+
+    <div id="success-msg" class="hidden text-center py-12">
+      <p class="text-6xl mb-4">✅</p>
+      <h2 class="text-2xl font-bold text-rm-success mb-2">Order Placed!</h2>
+      <p class="text-rm-neutral-600">We'll contact you shortly to confirm. Thank you for shopping with Redwan Mart!</p>
+      <a href="/shop" class="mt-6 inline-flex items-center gap-2 rounded-lg bg-rm-brand-red px-6 py-3 text-sm font-semibold text-white hover:bg-rm-brand-red-hover transition-colors">Continue Shopping</a>
+    </div>
+
+    <div class="mt-6 p-4 rounded-lg bg-rm-brand-gold/10 border border-rm-brand-gold/30">
+      <p class="text-sm text-rm-neutral-700"><strong>Note:</strong> Our team will contact you via phone/WhatsApp to confirm your order before delivery.</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<script is:inline>
+  const form = document.getElementById("checkout-form");
+  const summary = document.getElementById("order-summary");
+
+  function renderSummary() {
+    let cart = [];
+    try { cart = JSON.parse(localStorage.getItem("rm-cart") || "[]"); } catch (e) {}
+    if (cart.length === 0) {
+      window.location.href = "/cart";
+      return;
+    }
+    const total = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+    summary.innerHTML = '<div class="rounded-lg border p-4 bg-rm-neutral-50"><h3 class="font-semibold mb-2">Order Summary</h3><p class="text-sm text-rm-neutral-600">' + cart.length + ' item(s) — <strong class="text-rm-brand-red">৳' + total.toLocaleString() + '</strong></p></div>';
+  }
+
+  renderSummary();
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = document.getElementById("name").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const address = document.getElementById("address").value.trim();
+
+    if (!name || !phone || !address) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    fetch("/api/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        customer_name: name,
+        customer_phone: phone,
+        customer_address: address,
+        items: JSON.parse(localStorage.getItem("rm-cart") || "[]"),
+        total: JSON.parse(localStorage.getItem("rm-cart") || "[]").reduce((s, i) => s + i.price * i.quantity, 0),
+      }),
+    }).then(() => {
+      localStorage.removeItem("rm-cart");
+      window.dispatchEvent(new Event("cart-updated"));
+      form.classList.add("hidden");
+      document.getElementById("success-msg").classList.remove("hidden");
+    }).catch(() => {
+      alert("Failed to place order. Please try again.");
+    });
+  });
+</script>

@@ -1,0 +1,16 @@
+name = "redwanmart-com"
+pages_build_output_dir = "dist"
+compatibility_date = "2025-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "redwanmart-db"
+database_id = ""
+
+[[kv_namespaces]]
+binding = "KV"
+id = ""
+
+[[r2_buckets]]
+binding = "ASSETS"
+bucket_name = "redwanmart-assets"

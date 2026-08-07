@@ -1,0 +1,75 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout>
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-rm-neutral-50 to-red-50">
+    <div class="container mx-auto px-4 py-20 lg:py-28">
+      <div class="max-w-2xl">
+        <h1 class="text-4xl lg:text-6xl font-bold text-rm-neutral-900 leading-tight">
+          Your Trusted <span class="text-rm-brand-red">Online</span> Store
+        </h1>
+        <p class="mt-4 text-lg text-rm-neutral-600 leading-relaxed">
+          Quality products at great prices. Fast delivery across Bangladesh.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href="/shop" class="inline-flex items-center gap-2 rounded-lg bg-rm-brand-red px-6 py-3 text-sm font-semibold text-white hover:bg-rm-brand-red-hover transition-colors">
+            Shop Now
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a href="/categories" class="inline-flex items-center gap-2 rounded-lg border-2 border-rm-neutral-300 px-6 py-3 text-sm font-semibold text-rm-neutral-700 hover:border-rm-brand-red hover:text-rm-brand-red transition-colors">
+            Browse Categories
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Categories -->
+  <section class="container mx-auto px-4 py-16">
+    <h2 class="text-3xl font-bold text-center mb-2">Shop by Category</h2>
+    <p class="text-rm-neutral-500 text-center mb-10">Find exactly what you need</p>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {
+        [
+          { name: "Electronics", icon: "📱", slug: "electronics" },
+          { name: "Fashion", icon: "👕", slug: "fashion" },
+          { name: "Home & Living", icon: "🏠", slug: "home-living" },
+          { name: "Beauty", icon: "✨", slug: "beauty" },
+          { name: "Sports", icon: "⚽", slug: "sports" },
+          { name: "Books", icon: "📚", slug: "books" },
+          { name: "Toys", icon: "🧸", slug: "toys" },
+          { name: "Food", icon: "🍔", slug: "food" },
+        ].map((cat) => (
+          <a href={`/categories/${cat.slug}`} class="flex flex-col items-center gap-3 rounded-xl border border-gray-200 p-6 hover:border-rm-brand-red hover:shadow-md transition-all text-center group">
+            <span class="text-4xl">{cat.icon}</span>
+            <span class="font-medium text-sm text-rm-neutral-700 group-hover:text-rm-brand-red transition-colors">{cat.name}</span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Trust Banner -->
+  <section class="bg-rm-neutral-900 py-12">
+    <div class="container mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <div>
+        <p class="text-2xl font-bold text-white">100+</p>
+        <p class="text-sm text-rm-neutral-400 mt-1">Products</p>
+      </div>
+      <div>
+        <p class="text-2xl font-bold text-white">Fast</p>
+        <p class="text-sm text-rm-neutral-400 mt-1">Delivery</p>
+      </div>
+      <div>
+        <p class="text-2xl font-bold text-white">Secure</p>
+        <p class="text-sm text-rm-neutral-400 mt-1">Shopping</p>
+      </div>
+      <div>
+        <p class="text-2xl font-bold text-white">24/7</p>
+        <p class="text-sm text-rm-neutral-400 mt-1">Support</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

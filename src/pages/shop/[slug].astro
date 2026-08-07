@@ -1,0 +1,79 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { Button } from "@components/ui/Button";
+
+const product = {
+  id: 1,
+  slug: "premium-wireless-earbuds",
+  title: "Premium Wireless Earbuds",
+  price: 2499,
+  description: "Experience crystal-clear audio with these premium wireless earbuds. Features active noise cancellation, 30-hour battery life, and comfortable ergonomic design. Perfect for music lovers and professionals.",
+  images: ["https://placehold.co/600x600/EC1713/FFFFFF?text=Earbuds"],
+  category_id: 1,
+  stock: 50,
+};
+---
+
+<BaseLayout>
+  <section class="container mx-auto px-4 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <!-- Image -->
+      <div class="aspect-square rounded-xl bg-rm-neutral-100 overflow-hidden">
+        <img src={product.images[0]} alt={product.title} class="w-full h-full object-cover" />
+      </div>
+
+      <!-- Details -->
+      <div>
+        <p class="text-sm text-rm-neutral-400 mb-1">Redwan Mart</p>
+        <h1 class="text-3xl font-bold text-rm-neutral-900 mb-3">{product.title}</h1>
+        <p class="text-2xl font-bold text-rm-brand-red mb-6">৳{product.price.toLocaleString()}</p>
+        <p class="text-rm-neutral-600 leading-relaxed mb-6">{product.description}</p>
+
+        <p class="text-sm text-rm-neutral-400 mb-4">
+          {product.stock > 0 ? (
+            <span class="text-rm-success font-medium">{product.stock} in stock</span>
+          ) : "Out of stock"}
+        </p>
+
+        <div class="flex gap-4">
+          <Button variant="primary" size="lg" id="add-to-cart" class="flex-1">
+            Add to Cart
+          </Button>
+          <Button variant="gold" size="lg" id="buy-now" class="flex-1">
+            Buy Now
+          </Button>
+        </div>
+
+        <div class="mt-8 border-t pt-6">
+          <h3 class="font-semibold mb-2">Delivery</h3>
+          <p class="text-sm text-rm-neutral-500">Fast delivery across Bangladesh. Free shipping on orders over ৳5,000.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script is:inline>
+  const productData = {
+    productId: {product.id},
+    slug: "{product.slug}",
+    title: "{product.title}",
+    price: {product.price},
+    image: "{product.images[0]}",
+  };
+
+  document.getElementById("add-to-cart")?.addEventListener("click", () => {
+    let cart = [];
+    try { cart = JSON.parse(localStorage.getItem("rm-cart") || "[]"); } catch (e) {}
+    const existing = cart.find(i => i.productId === productData.productId);
+    if (existing) existing.quantity += 1;
+    else cart.push({ ...productData, quantity: 1 });
+    localStorage.setItem("rm-cart", JSON.stringify(cart));
+    window.dispatchEvent(new Event("cart-updated"));
+  });
+
+  document.getElementById("buy-now")?.addEventListener("click", () => {
+    document.getElementById("add-to-cart")?.click();
+    window.location.href = "/cart";
+  });
+</script>

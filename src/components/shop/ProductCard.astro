@@ -1,0 +1,33 @@
+---
+export interface Props {
+  product: {
+    id: number;
+    slug: string;
+    title: string;
+    price: number;
+    description: string;
+    images: string[];
+  };
+}
+
+const { product } = Astro.props;
+---
+
+<div class="rounded-xl border border-gray-200 bg-white overflow-hidden hover:shadow-lg transition-shadow group" data-product-card data-title={product.title}>
+  <a href={`/shop/${product.slug}`} class="block">
+    <div class="aspect-square bg-rm-neutral-100 overflow-hidden">
+      <img
+        src={product.images[0]}
+        alt={product.title}
+        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        loading="lazy"
+      />
+    </div>
+    <div class="p-4">
+      <h3 class="font-semibold text-sm text-rm-neutral-900 line-clamp-2 mb-1 group-hover:text-rm-brand-red transition-colors">
+        {product.title}
+      </h3>
+      <p class="text-rm-brand-red font-bold text-lg">৳{product.price.toLocaleString()}</p>
+    </div>
+  </a>
+</div>

@@ -1,0 +1,43 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout>
+  <section class="container mx-auto px-4 py-12 max-w-2xl">
+    <h1 class="text-4xl font-bold mb-6">About Redwan Mart</h1>
+    
+    <div class="prose prose-gray max-w-none space-y-6">
+      <p class="text-lg text-rm-neutral-600 leading-relaxed">
+        Redwan Mart is your trusted online destination for quality products at great prices. 
+        Founded with a mission to make shopping easy and accessible for everyone across Bangladesh.
+      </p>
+
+      <h2 id="contact" class="text-2xl font-bold mt-10">Contact Us</h2>
+      <div class="bg-rm-neutral-50 rounded-xl p-6 space-y-3">
+        <p class="flex items-center gap-2"><strong>Email:</strong> redwanmartbd@gmail.com</p>
+        <p class="flex items-center gap-2"><strong>WhatsApp:</strong> <a href="https://wa.me/+8801XXXXXXXXX" class="text-rm-brand-red hover:underline">Chat with us</a></p>
+        <p class="flex items-center gap-2"><strong>Location:</strong> Bangladesh</p>
+      </div>
+
+      <h2 id="faq" class="text-2xl font-bold mt-10">FAQ</h2>
+      <div class="space-y-4">
+        <details class="rounded-xl border p-4">
+          <summary class="font-semibold cursor-pointer">How do I place an order?</summary>
+          <p class="mt-2 text-sm text-rm-neutral-600">Browse products, add to cart, and fill in your delivery details at checkout. We'll contact you to confirm.</p>
+        </details>
+        <details class="rounded-xl border p-4">
+          <summary class="font-semibold cursor-pointer">What payment methods do you accept?</summary>
+          <p class="mt-2 text-sm text-rm-neutral-600">Currently we operate on a cash-on-delivery basis. We'll confirm payment details when we contact you.</p>
+        </details>
+        <details class="rounded-xl border p-4">
+          <summary class="font-semibold cursor-pointer">How long does delivery take?</summary>
+          <p class="mt-2 text-sm text-rm-neutral-600">Delivery typically takes 2-5 business days depending on your location within Bangladesh.</p>
+        </details>
+        <details class="rounded-xl border p-4">
+          <summary class="font-semibold cursor-pointer">Can I return a product?</summary>
+          <p class="mt-2 text-sm text-rm-neutral-600">Yes, we accept returns within 7 days if the product is unused and in original packaging.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
