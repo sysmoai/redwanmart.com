@@ -1,35 +1,49 @@
-name: Deploy to Cloudflare
+name: RedwanMart CI Validation (Production Release Held)
 
+# Validation only. Never publish Cloudflare Pages or Workers from a PR.
+# A separately owner-approved, exact-SHA release workflow is required.
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: redwanmart-validation-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
+  validate-build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
+      - name: Checkout without persisting a write token
+        uses: actions/checkout@v4
         with:
-          node-version: 20
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
           cache: npm
 
-      - run: npm ci
-      - run: npm run build
+      - name: Install dependencies from committed lockfile
+        run: npm ci
 
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=redwanmart-com
+      - name: Build Astro Cloudflare candidate
+        run: npm run build
 
-      - name: Deploy Workers & D1
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          command: deploy --dry-run
+      - name: Verify a nonempty build artifact and exclude common secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -d dist
+          test -n "$(find dist -type f -print -quit)"
+          if find dist -type f \( -name '.env' -o -name '.env.*' -o -name '*.pem' -o -name '*.key' \) -print -quit | grep -q .; then
+            echo "::error::Potential credential file in build output. Release is blocked."
+            exit 1
+          fi
+          echo "Build validation complete. Production publishing remains disabled."
